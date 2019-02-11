@@ -123,7 +123,7 @@ def summary_mounth(request):
     b = 0
     z = 0
     x = 0
-    test = 0
+    # test = 0 # testing quantity cargo
     incoming_date = Incoming.objects.values('incoming_date')
 
     end_date = request.GET.get('end_date')
@@ -145,30 +145,40 @@ def summary_mounth(request):
         all = incomings.count()
         out = outcomings.count()
 
-        test = Incoming.objects.annotate(
-                some_test=F('quantity_i') * F('quantity_i')
-                )
+        # test = Incoming.objects.annotate(
+        #         some_test=F('quantity_i') * F('quantity_i')
+        #         )
 
         # print (test.some_test)
 
         incoming_date = Incoming.objects.filter(incoming_date__icontains=start_date).values('incoming_date')
-        # z = incoming_date[0]['incoming_date']
+    #     # z = incoming_date[0]['incoming_date'] #-Not work
         z = datetime.datetime.strptime(end_date, '%Y-%m-%d').date()
         x = datetime.datetime.strptime(start_date, '%Y-%m-%d').date()
         b = 0
         if (z > x) == True:
-            print ('z больше x')
+            # print ('z больше x')
             a = ('z больше x')
             # b = (datetime.datetime.strptime(end_date, '%Y-%m-%d').date() - x).days #-Not work
             b = (z - x).days
         elif (z < x) == True:
-            print ('z меньше x')
+            # print ('z меньше x')
             a = ('z меньше x')
             # b = (datetime.datetime.strptime(end_date, '%Y-%m-%d').date() - x).days #-Not work
             b = (x - z).days
-    print (a, b, start_date, end_date, z)
-    context = {'all': all, 'out': out, 'rest': rest, 'incomings': incomings, 'test': test,
-                'a': a, 'b': b, 'start_date': start_date, 'end_date': end_date, 'z': z, 'x': x, 'incoming_date': incoming_date,
+    # print (a, b, start_date, end_date, z)
+    context = {'all': all, 
+            'out': out, 
+            'rest': rest, 
+            'incomings': incomings, 
+            # 'test': test, # testing quantity cargo
+            'a': a, 
+            'b': b, 
+            'start_date': start_date, 
+            'end_date': end_date, 
+            'z': z, 
+            'x': x, 
+            'incoming_date': incoming_date,
             'carton_p': carton_p, 'carton_r': carton_r,  'polietilen_p': polietilen_p,
             'carton_p_o': carton_p_o, 'carton_r_o': carton_r_o,  'polietilen_p_o': polietilen_p_o,
             'carton_p_r': carton_p_r, 'carton_r_r': carton_r_r,  'polietilen_p_r': polietilen_p_r}
