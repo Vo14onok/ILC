@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} | {{ site_title|default:_('ILC') }}{% endblock %}
+
+{% block branding %}
+<h1 id="site-name"><a href="/samsung/test/">{{ site_header|default:_('ILC administration') }}</a></h1>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}

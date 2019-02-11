@@ -1,0 +1,40 @@
+{% load staticfiles %}
+
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="{% static "css/base.css" %}"/>
+    <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+    {% block javascript %}{% endblock %}
+    <title>{% block title %}{% endblock %}</title>
+  </head>
+{% if user.is_active %}
+  <body class="main">
+    <div class="navbar">
+      <li>Привет. Вы вошли как:</li>
+      <li>{% firstof user.get_short_name user.get_username %}</li>
+      <a href="{% url 'logout_user' %}">Выйти</a>
+      <a href="{% url 'test' %}">test</a>
+      <a href="{% url 'summary' %}">summary</a>
+      <a href="{% url 'samsung' %}">Назад к списку</a>
+      <a href="{% url 'new' %}">созадать</a>
+      <a href="{% url 'exel_out' %}">Exel</a>
+      </div>
+  </body>
+{% else %}
+  <body class="main">
+    <div class="navbar">
+      <a href="/login/">Войти</a>
+    </div>
+  </body>
+</html>
+{% endif %}
+{% block messages %}
+    {% if messages %}
+    <ul class="messagelist">{% for message in messages %}
+      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message|capfirst }}</li>
+    {% endfor %}</ul>
+    {% endif %}
+{% endblock messages %}
+{% block content %}
+{% endblock %}

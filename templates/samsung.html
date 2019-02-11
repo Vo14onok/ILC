@@ -1,0 +1,86 @@
+{% extends "topbar.html" %}
+
+{% load staticfiles %}
+{% block content %}
+{% if user.is_active %}
+
+<form class="" action="" method="GET">
+  <font='black'></font><strong> Колличество записей :</strong> {{ allbase }}
+  <font='black'></font><strong> Незаконченных записей :</strong> {{ rest }}
+  <input type="text" name="search" value="{{ request.GET.search }}" required title="Формат для поиска даты ГГ-ММ-ДД. Пишем через тире.">
+  <input type="submit" name="" value="Поиск">
+</form>
+<hr>
+<table class="tablemain" align='center' cellpadding="1" cellspacing="1" border="1">
+  <thead>
+    <tr>
+    <th align="justify" width="30"> ID</td>
+    <th align="justify" width="130"> Дата</td>
+    <th align="justify" width="80">Грузовик</td>
+    <th align="justify" width="80">прицеп</td>
+    <th align="justify" width="100">Контейнер</td>
+    <th align="justify" width="150">Отправитель</td>
+    <th align="justify" width="100">груз</td>
+    <th align="justify" width="100">упаковка</td>
+    <th align="justify" width="100">ЦМР</td>
+    <th align="justify" width="40">Акт</td>
+    <th align="justify" width="100">На складе</td>
+    </tr>
+  </thead>
+    <tbody align='center' cellpadding="1" cellspacing="1" border="1">
+      {% for act in incomings %}
+      <tr>
+        <td align="center" width="30" bgcolor=#79aec8>
+          <a class="button" href="{{ act.get_absolute_url }}">{{ act.id }}</a>
+        </td>
+        <td align="justify" width="130">{{ act.incoming_date }}</td>
+        <td align="justify" width="80">{{ act.track_i }}</td>
+        <td align="justify" width="80">{{ act.trailer_i }}</td>
+        <td align="justify" width="100">{{ act.container_i }}</td>
+        <td align="justify" width="150">{{ act.sender }}</td>
+        <td align="justify" width="100">{{ act.cargo }}</td>
+        <td align="justify" width="100">{{ act.pack }}</td>
+        <td align="justify" width="100">{{ act.cmr }}</td>
+        <td align="justify" width="40">{{ act.akt_i }}</td>
+        {% if not act.outcoming.akt_o %}
+        <th align="justify" width="100" bgcolor=#90EE90></th>
+        {% elif act.outcoming.akt_o %}
+        <th align="justify" width="100" bgcolor=#F08080></th>
+        {% endif %}
+      </tr>
+      {% endfor %}
+    </tbody>
+</table>
+    <hr>
+
+
+{% block pagination %}
+{% if incomings.has_other_pages %}
+<div class="paginationstick center">
+  <ul class="pagination">
+    {% if incomings.has_previous %}
+      <li><a href="?page={{ incomings.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">&laquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&laquo;</span></li>
+    {% endif %}
+    {% for i in incomings.paginator.page_range %}
+      {% if incomings.number == i %}
+        <li class="active"><span>{{ i }} <span class="sr-only"></span></span></li>
+      {% else %}
+        <li><a href="?page={{ i }}">{{ i }}</a></li>
+      {% endif %}
+    {% endfor %}
+    {% if incomings.has_next %}
+      <li><a href="?page={{ incomings.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">&raquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&raquo;</span></li>
+    {% endif %}
+  </ul>
+</div>
+{% endif %}
+{% endblock %}
+{% else %}
+{% endif %}
+<script src="{% static 'js/tablesorter.js' %}"></script>
+{% block javascript %}{% endblock %}
+{% endblock %}

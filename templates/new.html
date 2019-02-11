@@ -1,0 +1,38 @@
+{% extends "topbar.html" %}
+{% if user.is_active %}
+{% block content %}
+<hr>
+<hr>
+<h1>Форма на разгрузку</h1>
+<hr>
+<hr>
+<form method="POST" action="">{% csrf_token %}
+  <div class="newin">
+    <p>Дата разгрузки:{{ form.incoming_date }}</p>
+    <hr>
+    <li>Номер грузовика:{{ form.track_i }}</li>
+    <li>Номер прицепа:{{ form.trailer_i }}</li>
+    <li>Номер контейнера:{{ form.container_i }}</li>
+  </div>
+  <hr>
+  <p>Снятие контейнера:{{ form.upload }}</p>
+  <hr>
+  <div class="newin">
+    <li>Отправитель:{{ form.sender }}</li>
+    <li>Наименование груза:{{ form.cargo }}</li>
+    <li>Вид упаковки:{{ form.pack }}</li>
+  </div>
+  <hr>
+  <p>Количество:{{ form.quantity_i }}</p>
+  <p>Ячейка:{{ form.cell_position }}</p>
+  <hr>
+  <div class="newin">
+    <li>CMR/TTH:{{ form.cmr }}</li>
+    <li>Номер акта:{{ form.akt_i }}</li>
+    <li>Лот:{{ form.lot }}</li>
+  </div>
+  <hr>
+  <input type="submit" value="Заполнить" />
+</form>
+{% endblock %}
+{% endif %}

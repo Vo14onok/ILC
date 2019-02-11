@@ -1,0 +1,25 @@
+{% extends "topbar.html" %}
+{% load staticfiles%}
+
+{% block content %}
+  <link rel="stylesheet" type="text/css" href="{% static "css/style.css" %}"/>
+  <body>
+      <title>Login</title>
+    </head>
+    <body>
+      <div class="container">
+        <div id="login">
+          <form action="." method="post">
+            {% csrf_token %}
+            <fieldset class="clearfix">
+              <p><span class="fontawesome-user"></span>{{ form.username }}</p>
+              <p><span class="fontawesome-lock"></span>{{ form.password }}</p>
+              <p><input type="submit" value="ВОЙТИ"></p>
+            </fieldset>
+          </form>
+        </div>
+      </div>
+    </body>
+  </html>
+  </body>
+{% endblock %}

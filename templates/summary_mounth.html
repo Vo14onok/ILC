@@ -1,0 +1,108 @@
+{% extends "topbar.html" %}
+
+{% block content %}
+
+<form class="" action="" method="GET">
+  <font='black'></font><strong></strong>
+  <input type="date" name="start_date" value="{{ request.GET.start_date }}" required >
+  <input type="date" name="end_date" value="{{ request.GET.end_date }}" required >
+  <input type="submit" name="" value="Поиск">
+</form>
+<hr>
+<table class="tablemain" align='center' cellpadding="1" cellspacing="1" border="1">
+  <thead>
+    <tr>
+    <th align="justify" width="">Наименование</td>
+    <th align="justify" width="">Приход</td>
+    <th align="justify" width="">Расход</td>
+    <th align="justify" width="">Остаток</td>
+    </tr>
+  </thead>
+    <tbody align='center' cellpadding="1" cellspacing="1" border="1">
+      <tr>
+        <th align="justify" width="">Полиетилен паллет</th>
+        <td align="justify" width="">{{ polietilen_p }}</td>
+        <td align="justify" width="">{{ polietilen_p_o }}</td>
+        <td align="justify" width="">{{ polietilen_p_r }}</td>
+      </tr>
+      <tr>
+        <th align="justify" width="">Картон паллет</th>
+        <td align="justify" width="">{{ carton_p }}</td>
+        <td align="justify" width="">{{ carton_p_o }}</td>
+        <td align="justify" width="">{{ carton_p_r }}</td>
+      </tr>
+      <tr>
+        <th align="justify" width="">Картон рулон</th>
+        <td align="justify" width="">{{ carton_r }}</td>
+        <td align="justify" width="">{{ carton_r_o }}</td>
+        <td align="justify" width="">{{ carton_r_r }}</td>
+      </tr>
+      <tr>
+        <th align="justify" width="">сумма</th>
+        <td align="justify" width="">{{ all }}</td>
+        <td align="justify" width="">{{ out }}</td>
+        <td align="justify" width="">{{ rest }}</td>
+      </tr>
+    </tbody>
+</table>
+    <hr>
+
+        {{ a }}, {{b}}, {{start_date}}, {{end_date}}, {{z}}, {{ x }}
+
+    <hr>
+    {# {{incoming_date}} #}
+    <table class="tablemain" align='center' cellpadding="1" cellspacing="1" border="1">
+      <thead>
+        <tr>
+        <th align="justify" width="30"> ID</td>
+        <th align="justify" width="130"> Дата</td>
+        <th align="justify" width="80">Грузовик</td>
+        <th align="justify" width="80">прицеп</td>
+        <th align="justify" width="100">Контейнер</td>
+        <th align="justify" width="150">Отправитель</td>
+        <th align="justify" width="100">груз</td>
+        <th align="justify" width="100">упаковка</td>
+        <th align="justify" width="100">ЦМР</td>
+        <th align="justify" width="40">Акт</td>
+        <th align="justify" width="100">На складе</td>
+        </tr>
+      </thead>
+        <tbody align='center' cellpadding="1" cellspacing="1" border="1">
+          {% for act in incomings %}
+          <tr>
+            <td align="center" width="30" bgcolor=#79aec8>
+              <a class="button" href="{{ act.get_absolute_url }}">{{ act.id }}</a>
+            </td>
+            <td align="justify" width="130">{{ act.incoming_date }}</td>
+            <td align="justify" width="80">{{ act.track_i }}</td>
+            <td align="justify" width="80">{{ act.trailer_i }}</td>
+            <td align="justify" width="100">{{ act.container_i }}</td>
+            <td align="justify" width="150">{{ act.sender }}</td>
+            <td align="justify" width="100">{{ act.cargo }}</td>
+            <td align="justify" width="100">{{ act.pack }}</td>
+            <td align="justify" width="100">{{ act.cmr }}</td>
+            <td align="justify" width="40">{{ act.akt_i }}</td>
+            {% if not act.outcoming.akt_o %}
+            <th align="justify" width="100" bgcolor=#90EE90></th>
+            {% elif act.outcoming.akt_o %}
+            <th align="justify" width="100" bgcolor=#F08080></th>
+            {% endif %}
+          </tr>
+          {% endfor %}
+        </tbody>
+    </table>
+  <hr>
+        <table>
+          <thead>
+            <th align="justify" width="30"> ID</td>
+            <th align="justify" width="30"> ID</td>
+          </thead>
+          {% for obj in test %}
+          <tbody>
+            <td align="justify" width="100">{{ obj.incoming_date }}</td>
+            <td align="justify" width="100">{{ obj.some_test }}</td>
+          </tbody>
+          {% endfor %}
+        </table>
+  <hr>
+{% endblock %}

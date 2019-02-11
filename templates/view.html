@@ -1,0 +1,160 @@
+{% extends "topbar.html" %}
+
+{% block content %}
+
+{% if user.is_active %}
+<hr>
+<hr>
+<h1>Разгрузка</h1>
+<hr>
+<hr>
+<table align='center' cellpadding="1" cellspacing="1" border="1">
+  {{ view_i.id }}/{{ view_o.akt_incoming }}
+  <thead>
+    <tr>
+      {# <th align="justify" width="30"> ID</td> #}
+      <th align="justify" width="150"> Дата</td>
+      <th align="justify" width="100">Грузовик</td>
+      <th align="justify" width="100">прицеп</td>
+      <th align="justify" width="100">Контейнер</td>
+      <th align="justify" width="100">Отправитель</td>
+      <th align="justify" width="100">разгрузка</td>
+    </tr>
+  </thead>
+  <tbody align='center' cellpadding="1" cellspacing="1" border="1">
+    <tr>
+      {# <td align="center" width="30" bgcolor=#e0e0e0> #}
+      {# <font color=#000000>{{ view_i.id }}</td> #}
+      <td align="justify" width="150">{{ view_i.incoming_date }}</td>
+      <td align="justify" width="100">{{ view_i.track_i}}</td>
+      <td align="justify" width="100">{{ view_i.trailer_i }}</td>
+      <td align="justify" width="100">{{ view_i.container_i }}</td>
+      <td align="justify" width="100">{{ view_i.sender }}</td>
+      {% if view_i.upload == '1' %}
+      <td align="justify" width="100" bgcolor=#90EE90>Да</td>
+      {% elif view_i.upload == '0' %}
+      <td align="justify" width="100" bgcolor=#F08080>Нет</td>
+      {% endif %}
+    </tr>
+  </tbody>
+  <thead>
+    <tr>
+      <th align="justify" width="150">груз</td>
+      <th align="justify" width="100">упаковка</td>
+      <th align="justify" width="100">Колличество</td>
+      <th align="justify" width="100">Ячейка</td>
+      <th align="justify" width="100">ЦМР</td>
+      <th align="justify" width="100">Акт</td>
+    </tr>
+  </thead>
+  <tbody align='center' cellpadding="1" cellspacing="1" border="1">
+    <tr>
+      <td align="justify" width="150">{{ view_i.cargo }}</td>
+      <td align="justify" width="100">{{ view_i.pack }}</td>
+      <td align="justify" width="100">{{ view_i.quantity_i }}</td>
+      <td align="justify" width="100">{{ view_i.cell_position }}</td>
+      <td align="justify" width="100">{{ view_i.cmr }}</td>
+      <td align="justify" width="100">{{ view_i.akt_i }}</td>
+    </tr>
+  </tbody>
+</table>
+<table align='center' cellpadding="1" cellspacing="1" border="1">
+  <thead>
+    <tr>
+      <th align="center" width="150">Лот</td>
+    </tr>
+  </thead>
+  <tbody align='center' cellpadding="1" cellspacing="1" border="1">
+    <tr>
+      <td align="center" width="793">{{ view_i.lot }}</td>
+    </tr>
+  </tbody>
+</table>
+
+
+{% if not view_o.akt_incoming %}
+<hr>
+<hr>
+<h1>Форма на отгрузку</h1>
+<hr>
+<hr>
+<form method="POST" action="">{% csrf_token %}
+  <p class="hidden">ID:{{ form_o.akt_incoming }}</p>
+  <div class="newin">
+    <p>Дата:{{ form_o.outcoming_date }}</p>
+    <hr>
+    <li>Номер машины:{{ form_o.track_o }}</li>
+    <li>Номер прицепа:{{ form_o.trailer_o }}</li>
+  </div>
+  <hr>
+  <p>Получатель:{{ form_o.recepient }}</p>
+  <hr>
+  <div class="newin">
+    <li>Акт:{{ form_o.akt_o }}</li>
+    <li>Колличество:{{ form_o.quantity_o }}</li>
+    <li>ТТН:{{ form_o.ttn }}</li>
+  </div>
+  <p>{{ form_o.comments }}</p>
+  <hr>
+  <input type="submit" value="Заполнить" />
+</form>
+{% else %}
+<hr>
+<hr>
+<h1>Отгрузка</h1>
+<hr>
+<hr>
+<table align='center' cellpadding="1" cellspacing="1" border="1">
+  <thead>
+    <tr>
+      {# <th align="justify" width="30"> ID</td> #}
+      <th align="justify" width="30"> Дата отгрузки</td>
+      <th align="justify" width="100"> Номер грузовика</td>
+      <th align="justify" width="100">Номер прицепа</td>
+      <th align="justify" width="100">Получатель</td>
+      <th align="justify" width="100">Номер акта</td>
+      <th align="justify" width="100">Количество</td>
+      <th align="justify" width="100">TTH</td>
+    </tr>
+  </thead>
+  <tbody align='center' cellpadding="1" cellspacing="1" border="1">
+    <tr>
+      {# <td align="justify" width="100">{{ view_o.akt_incoming }}</td> #}
+      <td align="justify" width="100">{{ view_o.outcoming_date }}</td>
+      <td align="justify" width="100">{{ view_o.track_o }}</td>
+      <td align="justify" width="100">{{ view_o.trailer_o }}</td>
+      <td align="justify" width="100">{{ view_o.recepient }}</td>
+      <td align="justify" width="100">{{ view_o.akt_o }}</td>
+      <td align="justify" width="100">{{ view_o.quantity_o }}</td>
+      <td align="justify" width="100">{{ view_o.ttn }}</td>
+    </tr>
+  </tbody>
+</table>
+<p>{{ view_o.comments }}</p>
+
+
+{% endif %} {% if a == 404 %} {% else %}
+<table align='center'>
+  <thead>
+    <th align="justify" width="30">Дней на складе</td>
+  </thead>
+  <tbody>
+    <td align="justify" width="100">{{ a }}</td>
+  </tbody>
+</table>
+{% endif %}
+{% else %}
+{% endif %}
+<table align='right' cellpadding="1" cellspacing="1" border="1">
+  <thead>
+    <tr>
+      <th align="center" width="100">дней на складе по сегодняшний</td>
+    </tr>
+  </thead>
+  <tbody align='center' cellpadding="1" cellspacing="1" border="1">
+    <tr>
+      <td align="center" width="100">{{ d }}</td>
+    </tr>
+  </tbody>
+</table>
+{% endblock %}
