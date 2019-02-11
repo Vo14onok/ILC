@@ -14,7 +14,7 @@ from django.views.generic import ListView
 from itertools import chain
 import datetime
 import calendar
-# import xlwt
+import xlwt
 
 
 
