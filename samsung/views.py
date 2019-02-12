@@ -24,6 +24,7 @@ class IncomingDetailView(generic.ListView):
     context_object_name = 'view'
 
 
+
 def view(request, id=None):
     view_i = get_object_or_404(Incoming, id=id)
     c = Incoming.objects.filter(id=id).values('incoming_date')
@@ -47,6 +48,7 @@ def view(request, id=None):
         return HttpResponseRedirect(instance.get_absolute_url())
     context = {'view_i': view_i, 'form_o': form_o, 'view_o':view_o, 'a': a, 'd': d}
     return render(request, 'view.html', context)
+
 
 
 def samsung(request):
@@ -102,6 +104,8 @@ def test(request):
     context = {'all': all, 'incomings': incomings, 'outcomings': outcomings, 'all': all}
     return render(request, 'test.html', context)
 
+
+
 def summary_mounth(request):
     incomings = Incoming.objects.all()
     outcomings = Outcoming.objects.all()
@@ -148,12 +152,15 @@ def summary_mounth(request):
         all = incomings.count()
         out = outcomings.count()
         print (incomings)
-        test = incomings.annotate(
-                some_test=Sum(F('quantity_i') * F('cargo__count'), output_field = FloatField()),
-                t = F('quantity_i'),
-                v = F('cargo__count'),
+
+
+        # test = incomings.annotate(
+        #         some_test=Sum(F('quantity_i') * F('cargo__count'), output_field = FloatField()),
+        #         t = F('quantity_i'),
+        #         v = F('cargo__count'),
                 # z = (F('outcoming__outcoming_date') - F('incoming_date'))
-                )
+                # )
+
 
         for item in incomings:
             print (Incoming.incoming_date)
@@ -167,12 +174,12 @@ def summary_mounth(request):
         if (z > x) == True:
             print ('z больше x')
             a = ('z больше x')
-            # b = (datetime.datetime.strptime(end_date, '%Y-%m-%d').date() - x).days
+            # b = (datetime.datetime.strptime(end_date, '%Y-%m-%d').date() - x).days  # Dont work
             b = (z - x).days
         elif (z < x) == True:
             print ('z меньше x')
             a = ('z меньше x')
-            # b = (datetime.datetime.strptime(end_date, '%Y-%m-%d').date() - x).days
+            # b = (datetime.datetime.strptime(end_date, '%Y-%m-%d').date() - x).days  # Dont work
             b = (x - z).days
     print (a, b, start_date, end_date, z)
     context = {'all': all, 'out': out, 'rest': rest, 'incomings': incomings, 'test': test,
@@ -181,6 +188,8 @@ def summary_mounth(request):
             'carton_p_o': carton_p_o, 'carton_r_o': carton_r_o,  'polietilen_p_o': polietilen_p_o,
             'carton_p_r': carton_p_r, 'carton_r_r': carton_r_r,  'polietilen_p_r': polietilen_p_r}
     return render(request, 'summary_mounth.html', context)
+
+
 
 def exel(request):
     response = HttpResponse(content_type='application/ms-excel')
@@ -206,7 +215,6 @@ def exel(request):
         row_num += 1
         for col_num in range(len(row)):
             ws.write(row_num, col_num, row[col_num], font_style)
-
-
+            
     wb.save(response)
     return response
