@@ -107,7 +107,7 @@ def summary_mounth(request):
     outcomings = Outcoming.objects.all()
     all = incomings.count()
     out = outcomings.count()
-    rest = all-out
+    rest = all - out
     carton_p = Incoming.objects.filter(cargo__cargotype__contains='Картон', pack__type__contains='Паллет').count()
     carton_r = Incoming.objects.filter(cargo__cargotype__contains='Картон', pack__type__contains='Рулон').count()
     polietilen_p = Incoming.objects.filter(cargo__cargotype__contains='Полиетилен', pack__type__contains='Паллет').count()
@@ -123,7 +123,10 @@ def summary_mounth(request):
     b = 0
     z = 0
     x = 0
-    # test = 0 # testing quantity cargo
+    test = incomings.annotate(
+            some_test=F('quantity_i') * F('quantity_i')
+            )
+
     incoming_date = Incoming.objects.values('incoming_date')
 
     end_date = request.GET.get('end_date')
@@ -144,41 +147,36 @@ def summary_mounth(request):
         akt_incoming__cargo__cargotype__contains='Полиетилен', akt_incoming__pack__type__contains='Паллет').count()
         all = incomings.count()
         out = outcomings.count()
+        print (incomings)
+        test = incomings.annotate(
+                some_test=Sum(F('quantity_i') * F('cargo__count'), output_field = FloatField()),
+                t = F('quantity_i'),
+                v = F('cargo__count'),
+                # z = (F('outcoming__outcoming_date') - F('incoming_date'))
+                )
 
-        # test = Incoming.objects.annotate(
-        #         some_test=F('quantity_i') * F('quantity_i')
-        #         )
-
+        for item in incomings:
+            print (Incoming.incoming_date)
         # print (test.some_test)
 
         incoming_date = Incoming.objects.filter(incoming_date__icontains=start_date).values('incoming_date')
-    #     # z = incoming_date[0]['incoming_date'] #-Not work
+        # z = incoming_date[0]['incoming_date']
         z = datetime.datetime.strptime(end_date, '%Y-%m-%d').date()
         x = datetime.datetime.strptime(start_date, '%Y-%m-%d').date()
         b = 0
         if (z > x) == True:
-            # print ('z больше x')
+            print ('z больше x')
             a = ('z больше x')
-            # b = (datetime.datetime.strptime(end_date, '%Y-%m-%d').date() - x).days #-Not work
+            # b = (datetime.datetime.strptime(end_date, '%Y-%m-%d').date() - x).days
             b = (z - x).days
         elif (z < x) == True:
-            # print ('z меньше x')
+            print ('z меньше x')
             a = ('z меньше x')
-            # b = (datetime.datetime.strptime(end_date, '%Y-%m-%d').date() - x).days #-Not work
+            # b = (datetime.datetime.strptime(end_date, '%Y-%m-%d').date() - x).days
             b = (x - z).days
-    # print (a, b, start_date, end_date, z)
-    context = {'all': all, 
-            'out': out, 
-            'rest': rest, 
-            'incomings': incomings, 
-            # 'test': test, # testing quantity cargo
-            'a': a, 
-            'b': b, 
-            'start_date': start_date, 
-            'end_date': end_date, 
-            'z': z, 
-            'x': x, 
-            'incoming_date': incoming_date,
+    print (a, b, start_date, end_date, z)
+    context = {'all': all, 'out': out, 'rest': rest, 'incomings': incomings, 'test': test,
+                'a': a, 'b': b, 'start_date': start_date, 'end_date': end_date, 'z': z, 'x': x, 'incoming_date': incoming_date,
             'carton_p': carton_p, 'carton_r': carton_r,  'polietilen_p': polietilen_p,
             'carton_p_o': carton_p_o, 'carton_r_o': carton_r_o,  'polietilen_p_o': polietilen_p_o,
             'carton_p_r': carton_p_r, 'carton_r_r': carton_r_r,  'polietilen_p_r': polietilen_p_r}
