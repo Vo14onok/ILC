@@ -56,7 +56,7 @@ ROOT_URLCONF = 'ILC.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['/home/sergey/Programing/ILC/templates'],
+        'DIRS': ['/home/sergey/Projects/ILC/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
